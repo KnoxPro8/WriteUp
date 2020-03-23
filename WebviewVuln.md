@@ -1,25 +1,3 @@
-### Vulnerability Description
-
-A lot of the time we use WebView to display a Webpage,for example many applications in order to achieve the server control, many results page is Webpage, rather than the local implementation, which has many advantages, such as interface change does not need to release a new version, directly modify the line at Server end. With Webpage to display interface, usually are more or less with the Java code have interaction, such as a button click Webpage above, we need to know the button click event, or we have to call a method, make the page to perform some action, in order to achieve these interactions, we usually use JS to achieve, while WebView has provided such a method, the specific usage is as follows: 
-
-
-	mWebView.getSettings().setJavaScriptEnabled(true);  
-        mWebView.addJavascriptInterface(new JSInterface(), "jsInterface");
-    
-We asked WebView to register a name "jsInterface" of the object, and then can access to the jsInterface object in JS, you can invoke some methods of the object, the final call to Java code, so as to realize the interaction of JS and Java code.
-We work together to have a look on the **addJavascriptInterface** method on the Android website description: 
-
-_This method can be used to allow JavaScript to control the host application. This is a powerful feature, but also presents a security risk for applications targeted to API level JELLYBEAN or below, because JavaScript could use reflection to access an injected object's public fields. Use of this method in a WebView containing untrusted content could allow an attacker to manipulate the host application in unintended ways, executing Java code with the permissions of the host application. Use extreme care when using this method in a WebView which could contain untrusted content._
-
-JavaScript interacts with Java object on a private, background thread of this WebView. Care is therefore required to maintain thread safety.
-The Java object's fields are not accessible.
-
- 
-Simply put, is to use addJavascriptInterface may lead to insecurity, because JS may contain malicious code. This loophole and today we want to say is this, when JS contains malicious code, it can do anything.
-
---------
-
-
 ### Vulnerablity Impact:
 Through the JavaScript, anything can access the device on the SD card, and even contact information, SMS etc.. It's disgusting, quack. 
 
